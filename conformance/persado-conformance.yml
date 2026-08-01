@@ -1,0 +1,33 @@
+generated: '2026-07-20'
+method: searched
+source: https://www.persado.com/
+notes: >-
+  Persado publishes no public OpenAPI, developer portal, or SDKs, so standards
+  conformance cannot be derived from a spec. The compliance posture below is
+  what Persado states publicly on its marketing/product surface (homepage and
+  the Automate product page). Persado's "API" is a send-time content-serving
+  integration embedded in ESPs (Salesforce Marketing Cloud, Adobe Campaign,
+  Braze, Cordial), not a self-service developer API.
+standards:
+- id: soc2-type-ii
+  conforms: true
+  evidence: 'Persado states SOC 2 Type II certification on www.persado.com'
+- id: gdpr
+  conforms: true
+  evidence: 'Persado states GDPR compliance and audit-trail capabilities on www.persado.com'
+- id: oauth2
+  conforms: false
+  evidence: 'no public OpenAPI or documented OAuth surface'
+- id: openid-connect
+  conforms: false
+  evidence: 'no /.well-known/openid-configuration (404) on www.persado.com'
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: 'no public spec to assert error format'
+compliance_program:
+  published: true
+  certifications:
+  - SOC 2 Type II
+  - GDPR
+  regulatory_frameworks_claimed: '20+ regulatory frameworks (per product marketing)'
+  source: https://www.persado.com/

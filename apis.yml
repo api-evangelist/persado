@@ -1,36 +1,44 @@
 aid: persado
 accessModel:
-  pricing: unknown
-  onboarding: unknown
+  pricing: enterprise-contract
+  onboarding: sales-gate
   trial: false
   try_now: false
   public: false
-  label: Unknown
-  confidence: low
-  source: []
-  generated: '2026-07-22'
-  method: derived
+  label: Enterprise Contract
+  confidence: high
+  source:
+  - https://www.persado.com/contact
+  - https://api.persado.com/.well-known/oauth-protected-resource
+  generated: '2026-08-13'
+  method: probed
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/persado.png
 name: Persado
-description: 'Persado is an enterprise AI platform that generates and optimizes marketing
-  and customer-communication language, built for regulated industries such as financial
-  services, insurance, healthcare, and retail. Its Motivation AI models produce compliant,
-  on-brand message variants, score them for predicted performance, and personalize
-  every send automatically, integrating with marketing platforms including Salesforce
-  Marketing Cloud, Adobe Campaign, and Braze. Persado is delivered through enterprise
-  contracts and platform integrations; it does not currently publish a public self-service
-  developer API, developer portal, or SDKs. This profile was surfaced as a portfolio
-  company of bain-capital-ventures and enriched by the API Evangelist pipeline.'
+description: 'Persado is an enterprise AI platform for regulated brands that generates,
+  scores, and deploys compliant marketing and customer-communication language at scale,
+  serving banking, credit cards, credit unions, fintech, insurance, and mortgage. Its
+  products — Create, Optimize, and Automate — combine domain-specific language models
+  with a multi-agent performance, brand, and compliance review, and deploy through
+  native connectors for Salesforce Marketing Cloud, Adobe Campaign, Adobe Target, Braze,
+  Responsys, and Optimizely. Persado runs a production remote Model Context Protocol
+  server, the "Persado MCP Gateway", at https://api.persado.com/mcp, protected by OAuth
+  2.1 with PKCE, dynamic client registration, and an mcp:tools scope issued by a Keycloak
+  realm on myaccount.persado.com. That agent surface is undocumented — Persado publishes
+  no developer portal, API reference, OpenAPI, or pricing — and was found by probing the
+  API host directly. Persado also ships a first-party Enterprise API Mobile SDK for iOS
+  and Android, though neither build is installable from a public package registry. This
+  profile was surfaced as a portfolio company of bain-capital-ventures and enriched by
+  the API Evangelist pipeline.'
 url: https://raw.githubusercontent.com/api-evangelist/persado/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - bain-capital-ventures
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: enriched
+x-tier-reason: portfolio-lead-enriched
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-20'
+modified: '2026-08-13'
 tags:
 - Company
 - Ai Apps
@@ -40,23 +48,87 @@ tags:
 - Customer Engagement
 - Content Generation
 - Personalization
-apis: []
+- Agents
+- MCP
+- Compliance
+- Financial Services
+apis:
+- name: Persado MCP Gateway
+  description: 'A production remote Model Context Protocol server operated by Persado
+    at https://api.persado.com/mcp. Discovered by probing the API host: the RFC 9728
+    protected-resource document names the resource verbatim as "Persado MCP Gateway
+    (Production)". Access is gated by OAuth 2.1 — authorization code with mandatory
+    S256 PKCE, public clients, RFC 7591 dynamic client registration at
+    https://api.persado.com/register, and an mcp:tools scope issued by the persado-portal
+    Keycloak realm. A tools/list call returns HTTP 401 with a spec-correct
+    WWW-Authenticate resource_metadata challenge, so the tool inventory is auth-gated and
+    is deliberately not recorded. Persado does not document this server anywhere public.'
+  humanURL: https://www.persado.com/platform
+  baseURL: https://api.persado.com/mcp
+  tags:
+  - MCP
+  - Agents
+  - Artificial Intelligence
+  - Marketing
+  properties:
+  - type: MCPServer
+    url: mcp/persado-mcp.yml
+  - type: Authentication
+    url: authentication/persado-authentication.yml
+  - type: OAuthScopes
+    url: scopes/persado-scopes.yml
+  - type: Conventions
+    url: conventions/persado-conventions.yml
+  - type: RateLimits
+    url: rate-limits/persado-rate-limits.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Website
+  url: https://www.persado.com/
+- type: MCPServer
+  url: mcp/persado-mcp.yml
+- type: Authentication
+  url: authentication/persado-authentication.yml
+- type: OAuthScopes
+  url: scopes/persado-scopes.yml
+- type: WellKnown
+  url: well-known/persado-well-known.yml
+- type: LLMsTxt
+  url: llms/persado-llms.txt
+- type: Packages
+  url: packages/persado-packages.yml
+- type: SDKs
+  url: packages/persado-packages.yml
+- type: Conventions
+  url: conventions/persado-conventions.yml
+- type: Lifecycle
+  url: lifecycle/persado-lifecycle.yml
+- type: Plans
+  url: plans/persado-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/persado-rate-limits.yml
 - type: DomainSecurity
   url: security/persado-domain-security.yml
 - type: Conformance
   url: conformance/persado-conformance.yml
 - type: Compliance
-  url: https://www.persado.com/
-- type: Website
-  url: https://www.persado.com/
+  url: https://www.persado.com/platform
+- type: GitHubOrganization
+  url: https://github.com/persado
+- type: Blog
+  url: https://www.persado.com/articles
+- type: Login
+  url: https://myaccount.persado.com/realms/persado-portal/account/
+- type: TermsOfService
+  url: https://www.persado.com/legal/terms-of-service
+- type: PrivacyPolicy
+  url: https://www.persado.com/legal/privacy-policy
 x-enrichment:
-  date: '2026-07-20'
+  date: '2026-08-13'
   status: enriched
-  artifacts_added: 1
+  artifacts_added: 12
   pass: local-v1

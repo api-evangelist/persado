@@ -1,0 +1,117 @@
+generated: '2026-08-13'
+method: probed
+source: >-
+  https://api.persado.com/mcp,
+  https://api.persado.com/.well-known/oauth-protected-resource,
+  https://api.persado.com/.well-known/oauth-authorization-server
+notes: >-
+  Persado's only anonymously observable API surface is the MCP gateway, so the
+  cross-cutting semantics recorded here are MCP's, not a REST API's. Where MCP
+  fixes a convention by specification (JSON-RPC 2.0 envelope, JSON-RPC error
+  objects, tools/list-and-call verbs) that is stated as inherited-from-protocol
+  rather than credited to Persado. Where a convention would have to be
+  Persado's own choice — idempotency, pagination, request tracing, versioning —
+  nothing is published and nothing is observable, and that is recorded as
+  absent rather than guessed.
+  NO IDEMPOTENCY CONTRACT IS PUBLISHED OR OBSERVABLE, so no Idempotency pointer
+  is emitted for this provider.
+
+transport:
+  protocol: Model Context Protocol over HTTP
+  endpoint: https://api.persado.com/mcp
+  envelope: JSON-RPC 2.0
+  accept: application/json, text/event-stream
+  inherited_from_protocol: true
+
+authentication:
+  style: OAuth 2.1 bearer token in the Authorization header
+  scheme: Bearer
+  location: header
+  required_scope: mcp:tools
+  discovery: >-
+    RFC 9728 — the 401 response carries
+    WWW-Authenticate: Bearer resource_metadata="https://api.persado.com/.well-known/oauth-protected-resource",
+    which points a client at the authorization server with no configuration.
+  client_registration: dynamic (RFC 7591) at https://api.persado.com/register
+  pkce: required, S256 only
+  cross_reference: authentication/persado-authentication.yml
+
+idempotency:
+  supported: false
+  header: null
+  scope: null
+  retention: null
+  note: >-
+    No idempotency key, no retry-safety contract and no documentation of
+    at-most-once semantics. MCP tool calls carry a JSON-RPC id, but that is a
+    request/response correlation identifier, NOT an idempotency key — it does
+    not deduplicate a retried call server-side. For a platform whose tools
+    plausibly generate and deploy marketing content, the absence of a
+    documented retry-safety contract is a material gap for agent use.
+
+pagination:
+  style: unknown
+  note: >-
+    MCP defines an optional opaque cursor/nextCursor pagination convention for
+    list operations. Whether Persado's gateway implements it cannot be observed
+    because tools/list is gated.
+
+error_envelope:
+  transport_errors:
+    format: plain text
+    example_status: 401
+    example_body: Unauthorized
+    content_type: text/plain; charset=utf-8
+    note: >-
+      HTTP-layer failures return a bare text body, not application/problem+json.
+      The machine-actionable part of the 401 is the WWW-Authenticate header, not
+      the body — which is correct for MCP, but means there is no RFC 9457
+      problem document.
+  protocol_errors:
+    format: JSON-RPC 2.0 error object
+    inherited_from_protocol: true
+    note: not observable anonymously
+  cross_reference: null
+  cross_reference_note: 'no errors/ artifact — no spec or error reference exists to derive one from'
+
+rate_limit_signaling:
+  headers: []
+  supported: false
+  cross_reference: rate-limits/persado-rate-limits.yml
+
+request_tracing:
+  request_id_header: null
+  correlation: 'JSON-RPC id only (per-request correlation, not distributed tracing)'
+  note: no request-id or trace-id header observed on any response
+
+versioning:
+  style: none
+  note: >-
+    The endpoint path is unversioned and no version field appears in either
+    discovery document. MCP protocolVersion is negotiated at initialize, which
+    is auth-gated.
+  cross_reference: lifecycle/persado-lifecycle.yml
+
+cors:
+  allow_origin: '*'
+  allow_methods: '*'
+  allow_headers: '*'
+  expose_headers: '*'
+  note: >-
+    Fully permissive CORS on the MCP gateway, which is what a browser-hosted
+    agent client needs in order to complete the discovery-then-authorize dance.
+
+transport_security:
+  hsts: true
+  hsts_max_age: 31536000
+  include_subdomains: true
+  content_type_options: nosniff
+  cross_reference: security/persado-domain-security.yml
+
+summary:
+  idempotency_published: false
+  pagination_published: false
+  versioning_published: false
+  error_format: 'plain text at HTTP layer; JSON-RPC 2.0 at protocol layer'
+  rate_limit_signaling: false
+  auth_discovery: 'RFC 9728 — fully automatic, the strongest convention on this surface'

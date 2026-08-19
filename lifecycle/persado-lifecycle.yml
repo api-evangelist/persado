@@ -1,0 +1,86 @@
+generated: '2026-08-13'
+method: probed
+source: >-
+  https://www.persado.com/, https://api.persado.com/,
+  https://persado.statuspage.io/, https://github.com/persado/eapi-mobile-sdk
+notes: >-
+  Persado publishes no versioning policy, no deprecation policy, no SLA and no
+  status page. This is a recorded absence backed by probes, not an unchecked
+  gap. The single most consequential item: the production MCP gateway at
+  https://api.persado.com/mcp carries no version identifier anywhere in its
+  public discovery surface, so an agent integrating against it has no way to
+  detect a breaking change other than by calling it and failing.
+
+versioning:
+  scheme: none-published
+  current: null
+  docs: null
+  note: >-
+    The MCP gateway endpoint is unversioned (/mcp, no /v1). Neither the RFC 8414
+    nor the RFC 9728 document carries a version, service-version or
+    protocol-version field. The MCP protocolVersion would be returned by an
+    initialize call, which is auth-gated.
+  sdk_versioning:
+    scheme: semver
+    current: 0.4.0
+    note: >-
+      The Enterprise API Mobile SDK uses semver and is still pre-1.0. The
+      published 0.4.0 has no matching git tag; the newest tag is v0.3.0.
+
+deprecation:
+  policy_url: null
+  sunset_header: unknown
+  deprecation_header: unknown
+  note: >-
+    No deprecation or sunset policy is published. RFC 8594 Sunset/Deprecation
+    header support could not be observed because every API response available
+    anonymously is a 401 or 404.
+
+sla:
+  url: null
+  uptime_target: null
+  note: >-
+    No public SLA. Persado is sold on enterprise contracts; any availability
+    commitment lives in the Master Service Agreement at
+    https://www.persado.com/legal/terms-of-service rather than on a public SLA
+    page.
+
+status_page: null
+status_page_probe:
+  - url: https://status.persado.com/
+    result: DNS does not resolve
+  - url: https://persado.statuspage.io/
+    status: 200
+    result: >-
+      FALSE POSITIVE — the hostname resolves but redirects to Atlassian's
+      Statuspage marketing site (title "Real-Time Incident Communication with
+      Statuspage | Atlassian"). There is no Persado status page behind it. Not
+      recorded as a status page and no StatusPage pointer is emitted.
+  - url: https://www.persado.com/status
+    status: 404
+
+changelog: null
+changelog_note: >-
+  No dated changelog, release-notes page or product-update feed was found.
+  Persado publishes company news (https://www.persado.com/company/news) and
+  press releases, which are announcements rather than a technical changelog.
+
+deprecated_operations: []
+deprecated_operations_note: 'no OpenAPI in the repo from which to derive deprecated operations'
+
+repository_activity:
+  org: https://github.com/persado
+  public_repos: 26
+  most_recent_push: '2026-07-14'
+  most_recent_repo: dreamcatcher
+  api_client_last_activity: '2024-02-24'
+  note: >-
+    The GitHub org is alive but the Enterprise API Mobile SDK — the only
+    first-party API client — has not been touched since February 2024.
+
+summary:
+  versioning_policy_published: false
+  deprecation_policy_published: false
+  sla_published: false
+  status_page_published: false
+  changelog_published: false

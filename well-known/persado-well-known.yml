@@ -1,0 +1,104 @@
+generated: '2026-08-13'
+method: probed
+source: live GET of /.well-known/* on every Persado host known to the profile
+notes: >-
+  Persado serves a real machine-readable discovery surface on its API host,
+  api.persado.com — an RFC 8414 OAuth 2.0 Authorization Server Metadata
+  document and an RFC 9728 OAuth 2.0 Protected Resource Metadata document —
+  both of which describe a remote MCP server ("Persado MCP Gateway
+  (Production)") at https://api.persado.com/mcp. The protected-resource
+  document delegates authorization to a Keycloak realm on
+  myaccount.persado.com, whose full OpenID Connect discovery document is also
+  public. No security.txt, api-catalog, ai-plugin.json or A2A agent card is
+  served on any host.
+  IMPORTANT NEGATIVE: portal.persado.com answers HTTP 200 with a 524-byte
+  single-page-app HTML shell for EVERY /.well-known/* path probed. Those are
+  not documents and are recorded as misses, not hits.
+hosts:
+- host: https://api.persado.com
+  role: API host / MCP gateway
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    content_type: application/json
+    file: persado-oauth-authorization-server.json
+    spec: RFC 8414
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    content_type: application/json
+    file: persado-oauth-protected-resource.json
+    spec: RFC 9728
+  - path: /.well-known/oauth-protected-resource/mcp
+    status: 200
+    content_type: application/json
+    note: identical body to the unsuffixed path (resource-scoped alias)
+    spec: RFC 9728
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://myaccount.persado.com
+  role: Keycloak identity provider (realm persado-portal)
+  documents:
+  - path: /realms/persado-portal/.well-known/openid-configuration
+    status: 200
+    content_type: application/json
+    file: persado-openid-configuration.json
+    spec: OpenID Connect Discovery 1.0
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://www.persado.com
+  role: marketing website
+  documents:
+  - path: /llms.txt
+    status: 200
+    content_type: text/plain
+    file: ../llms/persado-llms.txt
+    note: served at the site root, not under /.well-known/
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://portal.persado.com
+  role: customer web application (single-page app)
+  documents:
+  - path: /.well-known/*
+    status: 200
+    content_type: text/html
+    note: >-
+      SPA catch-all — every probed path returns the same 524-byte HTML shell.
+      Recorded as a MISS, not a document. No pointer is emitted from this host.
+summary:
+  documents_found: 4
+  security_txt: false
+  openid_configuration: true
+  oauth_authorization_server: true
+  oauth_protected_resource: true
+  api_catalog: false
+  ai_plugin: false
+  agent_card: false
+  llms_txt: true

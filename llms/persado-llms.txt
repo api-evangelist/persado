@@ -1,0 +1,35 @@
+# Persado
+
+> Persado is the agentic creative agency for regulated brands. Its purpose-built AI generates, optimizes, and deploys compliant marketing content at enterprise scale — faster to market, built for compliance, and proven to perform in production at the world's largest financial institutions.
+
+Persado serves regulated industries — banking, credit cards, credit unions, fintech, insurance, and mortgage — by combining domain-specific language models, multi-agent compliance review, and predictive optimization. Use the links below to understand the platform, the industry solutions, and the verified results.
+
+## Platform
+- [Platform](https://www.persado.com/platform): A purpose-built AI platform spanning domain-specific language models, multi-agent compliance, predictive optimization, and native integrations.
+- [Create](https://www.persado.com/create): Submit a brief in any format and get production-ready, compliant assets in days — copy, design, code, and compliance validation in one pass.
+- [Optimize](https://www.persado.com/optimize): Upload any approved asset, get it dual-scored for performance and compliance, and receive optimized variants within your existing guardrails.
+- [Automate](https://www.persado.com/automate): Machine learning picks the best-performing compliant variant for every segment across triggered and scheduled CRM campaigns — set up once, optimize continuously.
+
+## Solutions
+- [Banking](https://www.persado.com/solutions/banking): Deposit growth, account activation, and digital adoption campaigns at scale — high-volume consumer banking content without compliance risk.
+- [Credit Cards](https://www.persado.com/solutions/cards): Pre-approvals, reward offers, and balance transfers — high-volume, language-driven, compliance-critical card campaigns.
+- [Co-brand](https://www.persado.com/solutions/cobrand): Co-brand campaigns across two compliance teams and two sets of guidelines, run through one content supply chain with dual approvals at AI speed.
+- [Credit Unions](https://www.persado.com/solutions/credit-unions): Member-first marketing produced in days — compliant with NCUA, UDAAP, Reg DD, TILA, Reg Z, and ECOA from the first draft.
+- [Fintech](https://www.persado.com/solutions/fintech): Acquisition, onboarding, activation, and referral content at the velocity fintech growth demands, without the compliance risk that slows banks down.
+- [Insurance](https://www.persado.com/solutions/insurance): Trust-first insurance and wealth content for long decision cycles — behavioral intelligence that builds confidence without triggering doubt.
+- [Mortgage](https://www.persado.com/solutions/mortgage): Rate-sensitive offers, refinance windows, and purchase campaigns deployed in hours — compliant mortgage content while the rate environment still fits.
+
+## Proof
+- [Results](https://www.persado.com/results): Verified performance from production campaigns at the world's largest financial institutions — not pilots, not proofs of concept.
+- [Case Studies](https://www.persado.com/resource-library/case-studies): Customer case studies and measured outcomes.
+
+## Company
+- [About](https://www.persado.com/about): The AI platform purpose-built for regulated industries — leadership team, board of directors, and awards.
+- [Contact](https://www.persado.com/contact): Reach Persado's solution experts to explore the impact of language AI on your marketing.
+
+## Resources
+- [Articles](https://www.persado.com/articles): Blog covering AI, marketing, and compliance in regulated industries.
+- [Glossary](https://www.persado.com/glossary): Definitions of key AI and marketing terms.
+- [Podcast](https://www.persado.com/podcast): Conversations on AI, marketing, and financial services.
+- [News](https://www.persado.com/company/news): Company news and announcements.
+- [Press Releases](https://www.persado.com/company/press-releases): Official press releases.

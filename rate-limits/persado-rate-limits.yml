@@ -1,0 +1,50 @@
+generated: '2026-08-13'
+method: probed
+source: https://api.persado.com/mcp
+notes: >-
+  Persado publishes no rate-limit documentation — there is no developer portal
+  or API reference in which to publish it. No RateLimit-*, X-RateLimit-* or
+  Retry-After header was observed on any anonymously reachable Persado
+  response. The responses available without credentials are the 401 from the
+  MCP gateway and 200s from the three discovery documents, and none of them
+  carry rate-limit signalling. This is an honest zero: limits may well be
+  enforced behind authentication, but nothing about them is observable or
+  published, so an agent cannot back off intelligently.
+
+limit_count: 0
+documented: false
+headers_observed: []
+retry_after_observed: false
+status_code_on_exhaustion: unknown
+limits: []
+
+observed_response_headers:
+  url: https://api.persado.com/mcp
+  method: POST
+  status: 401
+  headers:
+  - access-control-allow-headers
+  - access-control-allow-methods
+  - access-control-allow-origin
+  - access-control-expose-headers
+  - content-type
+  - www-authenticate
+  - x-content-type-options
+  - content-length
+  - strict-transport-security
+  - date
+  note: >-
+    No rate-limit family header present. Fully permissive CORS
+    (Access-Control-Allow-Origin *) and HSTS with a one-year max-age are
+    present; neither bears on rate limiting.
+
+evidence:
+- url: https://api.persado.com/mcp
+  status: 401
+  note: no rate-limit headers on the challenge response
+- url: https://api.persado.com/.well-known/oauth-protected-resource
+  status: 200
+  note: no rate-limit headers on a successful response
+- url: https://www.persado.com/llms.txt
+  status: 200
+  note: provider link inventory contains no developer or rate-limit documentation

@@ -42,6 +42,14 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Persado is a company surfaced as a portfolio company of bain-capital-ventures and added to the API Evangelist network as a stub for enrichment. Sector: ai-apps. This profile is a lead awaiting the enrichment pipeline.
+Persado is an enterprise AI platform for regulated brands — banking, credit cards, credit unions, fintech, insurance, and mortgage — that generates, scores, and deploys compliant marketing language at scale. Sector: ai-apps. Surfaced as a portfolio company of bain-capital-ventures and enriched by the API Evangelist pipeline.
+
+## API surface
+
+Persado runs a **production remote Model Context Protocol server** — the "Persado MCP Gateway (Production)" — at `https://api.persado.com/mcp`. It is protected by OAuth 2.1: authorization code with mandatory S256 PKCE, public clients, RFC 7591 dynamic client registration at `https://api.persado.com/register`, and an `mcp:tools` scope issued by a Keycloak realm on `myaccount.persado.com`.
+
+This surface is **undocumented**. Persado publishes no developer portal, no API reference, no OpenAPI, and no pricing; the gateway was found by probing the API host root and reading the RFC 8414 and RFC 9728 discovery documents it serves. The tool inventory is auth-gated (`tools/list` returns HTTP 401 with a spec-correct `WWW-Authenticate` challenge) and is deliberately **not** recorded in this profile — no tools have been invented.
+
+Persado also ships a first-party Enterprise API Mobile SDK for iOS and Android, though neither build is installable from a public package registry: the Android artifact sits behind a credentialed GitHub Packages Maven repository (HTTP 401), and the iOS podspec declares its source as `"Not Published"`.
 
 Backed by: bain-capital-ventures — https://www.persado.com/

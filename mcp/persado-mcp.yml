@@ -1,0 +1,88 @@
+generated: '2026-08-13'
+method: probed
+status: published
+source: https://api.persado.com/.well-known/oauth-protected-resource
+notes: >-
+  Persado runs a live, production remote MCP server. It is not announced
+  anywhere in Persado's marketing or documentation surface — the www.persado.com
+  platform pages describe a "multi-agent" product but never mention MCP, and
+  Persado publishes no developer portal. The server was found by probing the
+  API host root: /.well-known/oauth-protected-resource returns an RFC 9728
+  document that names the resource outright as
+  "Persado MCP Gateway (Production)" at https://api.persado.com/mcp.
+  POST /mcp with a tools/list request returns HTTP 401 with a
+  WWW-Authenticate: Bearer resource_metadata=... challenge, which is the
+  MCP-spec-correct 401. The tool list is therefore auth-gated and is NOT
+  recorded here — no tools have been invented. Enumerating it would require a
+  user credential in the persado-portal Keycloak realm, which this profile does
+  not hold and will not obtain.
+
+server:
+  name: Persado MCP Gateway (Production)
+  transport: http
+  url: https://api.persado.com/mcp
+  protocol: Model Context Protocol
+  resource_name_verbatim: Persado MCP Gateway (Production)
+
+deployment:
+  mode: remote
+  endpoint: https://api.persado.com/mcp
+  auth: oauth
+  verified: probed
+
+authorization:
+  model: OAuth 2.1 / RFC 9728 protected resource
+  authorization_servers:
+  - https://myaccount.persado.com/realms/persado-portal
+  identity_provider: Keycloak (realm persado-portal)
+  authorization_endpoint: https://myaccount.persado.com/realms/persado-portal/protocol/openid-connect/auth
+  token_endpoint: https://myaccount.persado.com/realms/persado-portal/protocol/openid-connect/token
+  jwks_uri: https://myaccount.persado.com/realms/persado-portal/protocol/openid-connect/certs
+  dynamic_client_registration: https://api.persado.com/register
+  dcr_spec: RFC 7591
+  scopes_supported:
+  - openid
+  - offline_access
+  - mcp:tools
+  bearer_methods_supported:
+  - header
+  grant_types_supported:
+  - authorization_code
+  - refresh_token
+  code_challenge_methods_supported:
+  - S256
+  token_endpoint_auth_methods_supported:
+  - none
+  client_type: public client (PKCE, no client secret)
+
+tools:
+  status: gated
+  count: null
+  note: >-
+    tools/list requires a bearer token carrying the mcp:tools scope. No tool
+    names, descriptions or inputSchemas are recorded because none could be
+    observed anonymously. This is an honest gap, not an empty result.
+
+x-evidence:
+- fetched: '2026-08-13'
+  url: https://api.persado.com/.well-known/oauth-protected-resource
+  http_status: 200
+  content_type: application/json
+  file: ../well-known/persado-oauth-protected-resource.json
+- fetched: '2026-08-13'
+  url: https://api.persado.com/.well-known/oauth-authorization-server
+  http_status: 200
+  content_type: application/json
+  file: ../well-known/persado-oauth-authorization-server.json
+- fetched: '2026-08-13'
+  url: https://api.persado.com/mcp
+  method: POST
+  body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+  http_status: 401
+  www_authenticate: Bearer resource_metadata="https://api.persado.com/.well-known/oauth-protected-resource"
+  note: MCP-spec-correct 401 challenge; confirms a live MCP endpoint behind OAuth
+- fetched: '2026-08-13'
+  url: https://api.persado.com/register
+  method: GET
+  http_status: 405
+  note: method-not-allowed on GET; POST-only dynamic client registration endpoint

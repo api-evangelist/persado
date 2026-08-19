@@ -1,0 +1,35 @@
+generated: '2026-08-13'
+method: searched
+source: https://www.persado.com/contact
+notes: >-
+  Persado publishes no pricing of any kind. https://www.persado.com/pricing
+  returns HTTP 404 and no pricing, plans, packaging or tier page exists anywhere
+  in the site's own llms.txt link inventory (which lists Platform, Create,
+  Optimize, Automate, seven Solutions pages, Results, Case Studies, About,
+  Contact and Resources — and no pricing entry). The commercial motion is a
+  sales conversation: the site's only conversion path is the Contact page,
+  which routes to "Persado's solution experts". Onboarding is described on the
+  platform pages as a collaborative engagement including a two-hour kick-off
+  workshop and construction of a customer-specific language model, which is
+  consistent with negotiated enterprise contracts rather than published tiers.
+  The MCP gateway at https://api.persado.com/mcp is gated by the same
+  enterprise relationship — access requires an account in the persado-portal
+  identity realm, and there is no self-service signup.
+
+plan_count: 0
+pricing_model: enterprise-contract
+pricing_published: false
+self_service_signup: false
+free_tier: false
+trial: false
+plans: []
+
+evidence:
+- url: https://www.persado.com/pricing
+  status: 404
+- url: https://www.persado.com/contact
+  status: 200
+  note: sole commercial entry point — "Reach Persado's solution experts"
+- url: https://www.persado.com/llms.txt
+  status: 200
+  note: provider-authored link inventory; contains no pricing or plans link

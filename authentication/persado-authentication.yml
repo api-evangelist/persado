@@ -1,0 +1,120 @@
+generated: '2026-08-13'
+method: probed
+source: >-
+  https://api.persado.com/.well-known/oauth-authorization-server,
+  https://api.persado.com/.well-known/oauth-protected-resource,
+  https://myaccount.persado.com/realms/persado-portal/.well-known/openid-configuration
+notes: >-
+  Persado publishes no OpenAPI, so this profile is not derived from a spec. It
+  is transcribed from three machine-readable discovery documents Persado itself
+  serves: the RFC 8414 authorization-server metadata and RFC 9728
+  protected-resource metadata on api.persado.com, and the full OpenID Connect
+  discovery document for the Keycloak realm persado-portal on
+  myaccount.persado.com. Nothing here is inferred from marketing copy.
+  Two distinct scope sets are recorded deliberately. The MCP gateway advertises
+  a narrow, deliberately-scoped set (openid, offline_access, mcp:tools) and
+  restricts itself to authorization_code + refresh_token with mandatory PKCE
+  S256 and public clients. The underlying Keycloak realm advertises the full
+  stock Keycloak surface (13 scopes, 10 grant types including implicit and
+  password, and plain PKCE). The gateway's narrower profile is the one that
+  governs agent access, and it is the stronger of the two.
+
+summary:
+  types:
+  - oauth2
+  - openIdConnect
+  api_key_in: []
+  oauth2_flows:
+  - authorizationCode
+  pkce_required: true
+  pkce_methods:
+  - S256
+  bearer_methods:
+  - header
+  dynamic_client_registration: true
+  public_clients: true
+
+schemes:
+- name: PersadoMCPGatewayOAuth
+  type: oauth2
+  applies_to: https://api.persado.com/mcp
+  source: https://api.persado.com/.well-known/oauth-authorization-server
+  issuer: https://myaccount.persado.com/realms/persado-portal
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://myaccount.persado.com/realms/persado-portal/protocol/openid-connect/auth
+    tokenUrl: https://myaccount.persado.com/realms/persado-portal/protocol/openid-connect/token
+    refreshUrl: https://myaccount.persado.com/realms/persado-portal/protocol/openid-connect/token
+    scopes:
+      openid: OpenID Connect authentication
+      offline_access: Issue a refresh token for long-lived agent sessions
+      mcp:tools: Invoke tools exposed by the Persado MCP Gateway
+  jwks_uri: https://myaccount.persado.com/realms/persado-portal/protocol/openid-connect/certs
+  registration_endpoint: https://api.persado.com/register
+  registration_spec: RFC 7591 dynamic client registration
+  response_types_supported:
+  - code
+  grant_types_supported:
+  - authorization_code
+  - refresh_token
+  code_challenge_methods_supported:
+  - S256
+  token_endpoint_auth_methods_supported:
+  - none
+  note: >-
+    token_endpoint_auth_methods "none" plus S256-only PKCE means the gateway
+    expects PUBLIC clients using PKCE — the current OAuth 2.1 / MCP
+    best-practice shape for agent clients, not a weakness.
+
+- name: PersadoPortalKeycloakOIDC
+  type: openIdConnect
+  applies_to: https://myaccount.persado.com/realms/persado-portal
+  source: https://myaccount.persado.com/realms/persado-portal/.well-known/openid-configuration
+  openIdConnectUrl: https://myaccount.persado.com/realms/persado-portal/.well-known/openid-configuration
+  issuer: https://myaccount.persado.com/realms/persado-portal
+  endpoints:
+    authorization: https://myaccount.persado.com/realms/persado-portal/protocol/openid-connect/auth
+    token: https://myaccount.persado.com/realms/persado-portal/protocol/openid-connect/token
+    userinfo: https://myaccount.persado.com/realms/persado-portal/protocol/openid-connect/userinfo
+    jwks: https://myaccount.persado.com/realms/persado-portal/protocol/openid-connect/certs
+    introspection: https://myaccount.persado.com/realms/persado-portal/protocol/openid-connect/token/introspect
+    revocation: https://myaccount.persado.com/realms/persado-portal/protocol/openid-connect/revoke
+    end_session: https://myaccount.persado.com/realms/persado-portal/protocol/openid-connect/logout
+    device_authorization: https://myaccount.persado.com/realms/persado-portal/protocol/openid-connect/auth/device
+    registration: https://myaccount.persado.com/realms/persado-portal/clients-registrations/openid-connect
+  grant_types_supported:
+  - authorization_code
+  - client_credentials
+  - implicit
+  - password
+  - refresh_token
+  - urn:ietf:params:oauth:grant-type:device_code
+  - urn:ietf:params:oauth:grant-type:jwt-bearer
+  - urn:ietf:params:oauth:grant-type:token-exchange
+  - urn:ietf:params:oauth:grant-type:uma-ticket
+  - urn:openid:params:grant-type:ciba
+  code_challenge_methods_supported:
+  - plain
+  - S256
+  token_endpoint_auth_methods_supported:
+  - private_key_jwt
+  - client_secret_basic
+  - client_secret_post
+  - tls_client_auth
+  - client_secret_jwt
+  note: >-
+    Stock Keycloak realm surface. Includes mutual-TLS client authentication
+    (tls_client_auth) and private_key_jwt, both available to enterprise
+    integrations. The MCP gateway does not use these.
+
+undocumented:
+  developer_docs: >-
+    Persado publishes no public authentication documentation, no developer
+    portal and no API reference. Everything above was read from discovery
+    documents, not from prose. A provider-published auth guide would be the
+    single highest-value addition to this surface.
+  legacy_enterprise_api: >-
+    Persado's platform pages describe a "Lite API", server-side API
+    integration and a client-side JavaScript snippet, and the persado/
+    GitHub org ships an Enterprise API Mobile SDK, but the authentication
+    model for that older Enterprise API is not published anywhere public.

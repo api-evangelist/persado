@@ -1,0 +1,1 @@
+{"resource":"https://api.persado.com/mcp","resource_name":"Persado MCP Gateway (Production)","authorization_servers":["https://myaccount.persado.com/realms/persado-portal"],"scopes_supported":["openid","offline_access","mcp:tools"],"bearer_methods_supported":["header"],"token_endpoint_auth_methods_supported":["none"]}

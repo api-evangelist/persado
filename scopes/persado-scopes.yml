@@ -1,0 +1,80 @@
+generated: '2026-08-13'
+method: probed
+source: >-
+  https://api.persado.com/.well-known/oauth-authorization-server,
+  https://api.persado.com/.well-known/oauth-protected-resource,
+  https://myaccount.persado.com/realms/persado-portal/.well-known/openid-configuration
+docs: null
+notes: >-
+  No provider-published scope reference page exists — Persado has no developer
+  portal. Every scope below was read verbatim from a discovery document Persado
+  serves. Descriptions for the three MCP-gateway scopes are written by API
+  Evangelist from their standard meanings and the resource they gate; the scope
+  STRINGS are Persado's. Keycloak's stock built-in scopes are listed separately
+  and are not part of the agent-facing contract.
+
+schemes:
+- name: PersadoMCPGatewayOAuth
+  source: https://api.persado.com/.well-known/oauth-authorization-server
+  resource: https://api.persado.com/mcp
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://myaccount.persado.com/realms/persado-portal/protocol/openid-connect/auth
+    tokenUrl: https://myaccount.persado.com/realms/persado-portal/protocol/openid-connect/token
+
+scopes:
+- scope: mcp:tools
+  description: >-
+    Invoke tools exposed by the Persado MCP Gateway. This is Persado's own
+    custom scope and is the single gate on the entire agent surface — a token
+    without it cannot call tools/list or tools/call.
+  flows: [authorizationCode]
+  custom: true
+  sources:
+  - https://api.persado.com/.well-known/oauth-authorization-server
+  - https://api.persado.com/.well-known/oauth-protected-resource
+  - https://myaccount.persado.com/realms/persado-portal/.well-known/openid-configuration
+- scope: openid
+  description: Standard OpenID Connect authentication; returns an ID token identifying the user.
+  flows: [authorizationCode]
+  custom: false
+  sources:
+  - https://api.persado.com/.well-known/oauth-authorization-server
+  - https://api.persado.com/.well-known/oauth-protected-resource
+- scope: offline_access
+  description: >-
+    Issue a refresh token so an agent session can outlive the access-token
+    lifetime without re-prompting the user.
+  flows: [authorizationCode]
+  custom: false
+  sources:
+  - https://api.persado.com/.well-known/oauth-authorization-server
+  - https://api.persado.com/.well-known/oauth-protected-resource
+
+realm_scopes:
+  note: >-
+    Advertised by the underlying Keycloak realm (persado-portal) but NOT by the
+    MCP gateway's protected-resource metadata. These are stock Keycloak client
+    scopes, not a Persado product surface. Recorded for completeness only.
+  source: https://myaccount.persado.com/realms/persado-portal/.well-known/openid-configuration
+  scopes:
+  - acr
+  - address
+  - basic
+  - email
+  - microprofile-jwt
+  - organization
+  - phone
+  - profile
+  - roles
+  - service_account
+  - web-origins
+
+summary:
+  agent_facing_scope_count: 3
+  custom_scope_count: 1
+  realm_scope_count: 11
+  granularity: >-
+    Coarse. A single mcp:tools scope gates every tool on the gateway; there is
+    no per-tool or read-vs-write scope separation. An agent granted mcp:tools
+    can call anything the server exposes.

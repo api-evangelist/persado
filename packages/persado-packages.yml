@@ -1,0 +1,127 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://github.com/persado/eapi-mobile-sdk,
+  https://github.com/persado/eapi-mobile-sdk-android-demoapp,
+  https://search.maven.org/, https://registry.npmjs.org/, https://pypi.org/
+notes: >-
+  Persado ships ONE first-party API client — the Enterprise API Mobile SDK,
+  in iOS and Android builds — and neither build is installable from a public
+  package registry. This is the headline finding of this artifact.
+  Android: the demo app resolves
+  com.persado.enterprise.apiclient:mobilesdk-android:0.4.0 from a private
+  GitHub Packages Maven repository that requires a username and token
+  (settings.gradle.kts declares mavenUser/mavenToken credentials). A HEAD on
+  that repository's maven-metadata.xml returns HTTP 401, so the artifact cannot
+  be resolved by a developer who is not already a Persado customer.
+  iOS: mobilesdk.podspec declares version 0.4.0 but sets
+  :git => "Not Published" — the pod is not on the CocoaPods trunk (404) and the
+  spec's own source field says so. It is consumed by vendoring the checked-in
+  mobilesdk.xcframework from the GitHub repository.
+  Currency: the podspec and the Android demo app both name 0.4.0, but the
+  newest git tag in eapi-mobile-sdk is v0.3.0 and the repository's last commit
+  is from February 2024 — the published 0.4.0 has no corresponding tag.
+  No npm, PyPI, RubyGems, NuGet, crates.io, Packagist or Go module exists for
+  Persado's API. There is no MCP client package either; the MCP gateway is a
+  remote endpoint, not an installable server.
+
+packages:
+- language: swift-objectivec
+  platform: ios
+  registry: github
+  name: mobilesdk
+  pod_name: mobilesdk
+  url: https://github.com/persado/eapi-mobile-sdk
+  install: >-
+    Vendored xcframework — clone the repository and link
+    mobilesdk.xcframework, or point a Podfile at the repo. The podspec's
+    source is literally "Not Published", so `pod install` from the CocoaPods
+    trunk does not work.
+  official: true
+  version: 0.4.0
+  published: null
+  version_source: mobilesdk.podspec (spec.version)
+  latest_git_tag: v0.3.0
+  last_repo_activity: '2024-02-24'
+  note: >-
+    version: 0.4.0 comes from the podspec, which is the only version statement
+    Persado publishes for the iOS build. published: null because there is no
+    registry release to date — CocoaPods trunk returns 404 for this pod and the
+    repository carries no v0.4.0 tag or GitHub Release. Checked, nothing to
+    record.
+  deployment_targets:
+    ios: '16.1'
+
+- language: kotlin-java
+  platform: android
+  registry: github-packages-maven
+  name: com.persado.enterprise.apiclient:mobilesdk-android
+  url: https://maven.pkg.github.com/persado/eapi-mobile-sdk
+  install: >-
+    implementation("com.persado.enterprise.apiclient:mobilesdk-android:0.4.0")
+    — requires a GitHub Packages username + token in gradle.properties
+    (mavenUser / mavenToken). Not resolvable anonymously.
+  official: true
+  version: 0.4.0
+  published: null
+  version_source: >-
+    app/build.gradle.kts in persado/eapi-mobile-sdk-android-demoapp
+    (val persadoVersion = "0.4.0")
+  gated: true
+  gate_evidence:
+    url: https://maven.pkg.github.com/persado/eapi-mobile-sdk/com/persado/enterprise/apiclient/mobilesdk-android/maven-metadata.xml
+    status: 401
+  note: >-
+    published: null because the registry that would carry the release date is
+    credential-gated and returns 401 anonymously. Checked, nothing to record —
+    not a guess.
+
+- language: java
+  registry: maven-central
+  name: com.persado.oss.quality.stevia:stevia-core
+  url: https://central.sonatype.com/artifact/com.persado.oss.quality.stevia/stevia-core
+  install: >-
+    implementation("com.persado.oss.quality.stevia:stevia-core:1.0.2")
+  official: true
+  api_client: false
+  version: 1.0.2
+  published: '2023-03-24'
+  version_source: https://search.maven.org/solrsearch/select?q=g:com.persado.oss.quality.stevia
+  note: >-
+    Stevia is Persado's open-source QA automation testing framework, not a
+    client library for the Persado API. It is the ONLY Persado artifact on any
+    public package registry. Recorded for completeness and explicitly flagged
+    api_client: false so it is not miscounted as an SDK for the platform.
+
+registries_checked:
+- registry: npm
+  query: persado, @persado/sdk, persado-sdk
+  result: not found
+- registry: pypi
+  query: persado
+  result: not found (404)
+- registry: maven-central
+  query: 'persado, g:com.persado.enterprise.apiclient'
+  result: only com.persado.oss.quality.stevia (QA framework); no API client
+- registry: cocoapods-trunk
+  query: PersadoSDK, mobilesdk
+  result: not found (404)
+- registry: rubygems
+  query: stevia
+  result: not found (404)
+- registry: nuget
+  result: not checked — Persado ships no .NET surface
+- registry: crates.io
+  result: not checked — Persado ships no Rust surface
+
+summary:
+  official_api_clients: 2
+  publicly_installable_api_clients: 0
+  registry_published_packages: 1
+  registry_published_api_clients: 0
+  decay_signal: >-
+    The only first-party API client last saw repository activity in February
+    2024 and its newest git tag (v0.3.0) trails the version both build files
+    ship (0.4.0). Meanwhile Persado stood up a production MCP gateway that the
+    SDK has no relationship to. The SDK wraps the older Enterprise API; the
+    agent surface is new and unpackaged.

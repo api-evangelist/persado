@@ -1,19 +1,14 @@
-generated: '2026-08-13'
+generated: '2026-09-19'
 method: probed
 source: live GET of /.well-known/* on every Persado host known to the profile
-notes: >-
-  Persado serves a real machine-readable discovery surface on its API host,
-  api.persado.com — an RFC 8414 OAuth 2.0 Authorization Server Metadata
-  document and an RFC 9728 OAuth 2.0 Protected Resource Metadata document —
-  both of which describe a remote MCP server ("Persado MCP Gateway
-  (Production)") at https://api.persado.com/mcp. The protected-resource
-  document delegates authorization to a Keycloak realm on
-  myaccount.persado.com, whose full OpenID Connect discovery document is also
-  public. No security.txt, api-catalog, ai-plugin.json or A2A agent card is
-  served on any host.
-  IMPORTANT NEGATIVE: portal.persado.com answers HTTP 200 with a 524-byte
-  single-page-app HTML shell for EVERY /.well-known/* path probed. Those are
-  not documents and are recorded as misses, not hits.
+notes: 'Persado serves a real machine-readable discovery surface on its API host, api.persado.com — an
+  RFC 8414 OAuth 2.0 Authorization Server Metadata document and an RFC 9728 OAuth 2.0 Protected Resource
+  Metadata document — both of which describe a remote MCP server ("Persado MCP Gateway (Production)")
+  at https://api.persado.com/mcp. The protected-resource document delegates authorization to a Keycloak
+  realm on myaccount.persado.com, whose full OpenID Connect discovery document is also public. No security.txt,
+  api-catalog, ai-plugin.json or A2A agent card is served on any host. IMPORTANT NEGATIVE: portal.persado.com
+  answers HTTP 200 with a 524-byte single-page-app HTML shell for EVERY /.well-known/* path probed. Those
+  are not documents and are recorded as misses, not hits.'
 hosts:
 - host: https://api.persado.com
   role: API host / MCP gateway
@@ -61,6 +56,11 @@ hosts:
     status: 404
   - path: /.well-known/agent.json
     status: 404
+  - path: /realms/persado-portal/.well-known/oauth-authorization-server
+    status: 200
+    file: persado-myaccount-oauth-authorization-server.json
+    bytes: 6913
+  path_echo_control: passed
 - host: https://www.persado.com
   role: marketing website
   documents:
@@ -89,9 +89,8 @@ hosts:
   - path: /.well-known/*
     status: 200
     content_type: text/html
-    note: >-
-      SPA catch-all — every probed path returns the same 524-byte HTML shell.
-      Recorded as a MISS, not a document. No pointer is emitted from this host.
+    note: SPA catch-all — every probed path returns the same 524-byte HTML shell. Recorded as a MISS,
+      not a document. No pointer is emitted from this host.
 summary:
   documents_found: 4
   security_txt: false
@@ -102,3 +101,16 @@ summary:
   ai_plugin: false
   agent_card: false
   llms_txt: true
+x-mcp-probe:
+  probed: '2026-09-19'
+  issue: roadmap#321, roadmap#337
+  documents:
+  - host: https://myaccount.persado.com
+    path: /realms/persado-portal/.well-known/oauth-authorization-server
+    file: persado-myaccount-oauth-authorization-server.json
+  validated_on: resource (RFC 9728) / issuer (RFC 8414, OIDC)
+  negative_control: one per host; a 2xx JSON object at an impossible path discards the host
+note: 'MCP-host OAuth discovery added 2026-09-19 (roadmap#321/#337): the harvest visits a provider''s
+  primary hosts, and RFC 9728 protected-resource metadata lives on the MCP host, so these documents existed
+  and were invisible to the scorer. Fetched live and validated on `resource`/`issuer`; one negative control
+  per host.'

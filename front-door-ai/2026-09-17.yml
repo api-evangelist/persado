@@ -1,0 +1,31 @@
+# Front Door AI Index — persado — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: persado
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.persado.com
+  final_host: www.persado.com
+  ownership: own
+  owner: persado
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 30
+  host_score: 30
+  density: 11.52
+  words: 2604
+  tiers:
+    agentic: 3
+    core: 26
+    model: 1
+  ambiguous: 4
+  top_terms:
+    AI: 21
+    LLMs: 5
+    agent: 2
+    agentic: 2
+    intelligence: 2
+    ChatGPT: 1
+    MCP: 1

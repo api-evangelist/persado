@@ -80,3 +80,21 @@ x-evidence:
   method: GET
   http_status: 405
   note: method-not-allowed on GET; POST-only dynamic client registration endpoint
+rfc9728:
+  endpoint: https://api.persado.com/mcp
+  metadata_url: https://api.persado.com/.well-known/oauth-protected-resource
+  discovered_via: WWW-Authenticate resource_metadata on an anonymous POST initialize
+  fetched: '2026-09-25'
+  http_status: 200
+  content_type: application/json
+  document:
+    resource: https://api.persado.com/mcp
+    authorization_servers:
+    - https://myaccount.persado.com/realms/persado-portal
+    scopes_supported:
+    - openid
+    - offline_access
+    - mcp:tools
+    bearer_methods_supported:
+    - header
+    resource_name: Persado MCP Gateway (Production)
